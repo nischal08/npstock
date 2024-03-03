@@ -2,24 +2,24 @@ import 'package:hive/hive.dart';
 import 'package:npstock/data/database_keys.dart';
 
 class DatabaseHelperRepository {
-  deleteTicket(String name) async {
+  deleteTicker(String name) async {
     var box = await Hive.openBox(DatabaseBoxId.stock);
-    box.delete(DatabaseBoxKeys.ticket);
+    box.delete(DatabaseBoxKeys.Ticker);
   }
 
-  addTicket(String name) async {
+  addTicker(String name) async {
     var box = await Hive.openBox(DatabaseBoxId.stock);
 
-    List<String>? allItem =await getAllTicket();
+    List<String>? allItem = await getAllTicker();
     if (allItem == null) {
-      await box.put(DatabaseBoxKeys.ticket, [name]);
+      await box.put(DatabaseBoxKeys.Ticker, [name]);
     } else {
-      await box.put(DatabaseBoxKeys.ticket, [allItem, name]);
+      await box.put(DatabaseBoxKeys.Ticker, [...allItem, name]);
     }
   }
 
-  dynamic getAllTicket() async {
+  Future<dynamic> getAllTicker() async {
     var box = await Hive.openBox(DatabaseBoxId.stock);
-    box.get(DatabaseBoxKeys.ticket, defaultValue: null);
+    return await box.get(DatabaseBoxKeys.Ticker, defaultValue: null);
   }
 }

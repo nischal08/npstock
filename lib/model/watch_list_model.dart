@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final watchList = watchListFromJson(jsonString);
-
 import 'dart:convert';
 
 WatchList watchListFromJson(String str) => WatchList.fromJson(json.decode(str));
@@ -30,13 +26,13 @@ class ResponseData {
   final String indices;
   final String tickerName;
   final double ltp;
-  final int ltv;
+  final double ltv;
   final double pointChange;
   final double percentageChange;
-  final int open;
+  final double open;
   final double high;
-  final int low;
-  final int volume;
+  final double low;
+  final double volume;
   final double previousClosing;
   final DateTime calculatedOn;
   final double amount;
@@ -69,18 +65,18 @@ class ResponseData {
         indices: json["indices"],
         tickerName: json["ticker_name"],
         ltp: json["ltp"]?.toDouble(),
-        ltv: json["ltv"],
+        ltv: json["ltv"]?.toDouble(),
         pointChange: json["point_change"]?.toDouble(),
         percentageChange: json["percentage_change"]?.toDouble(),
-        open: json["open"],
+        open: json["open"]?.toDouble(),
         high: json["high"]?.toDouble(),
-        low: json["low"],
-        volume: json["volume"],
+        low: json["low"]?.toDouble(),
+        volume: json["volume"]?.toDouble(),
         previousClosing: json["previousClosing"]?.toDouble(),
         calculatedOn: DateTime.parse(json["calculated_on"]),
         amount: json["amount"]?.toDouble(),
         datasource: json["datasource"],
-        icon: json["icon"],
+        icon: "https://${json["icon"]}",
         chartData: List<ChartDatum>.from(
             json["chartData"].map((x) => ChartDatum.fromJson(x))),
       );

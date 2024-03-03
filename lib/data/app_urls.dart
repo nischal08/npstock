@@ -1,6 +1,6 @@
 class AppUrl {
   static const String baseUrl = "https://www.onlinekhabar.com/smtm";
-  static const String allTicket = "$baseUrl/search-list/tickers";
+  static const String allTicker = "$baseUrl/search-list/tickers";
   static const String securitiesStats =
       "$baseUrl/ticker-page/ticker-stats/[name]";
   static const String watchList = "$baseUrl/home/watchlist";

@@ -1,22 +1,22 @@
 // To parse this JSON data, do
 //
-//     final allTickets = allTicketsFromJson(jsonString);
+//     final allTickers = allTickersFromJson(jsonString);
 
 import 'dart:convert';
 
-AllTickets allTicketsFromJson(String str) =>
-    AllTickets.fromJson(json.decode(str));
+AllTickers allTickersFromJson(String str) =>
+    AllTickers.fromJson(json.decode(str));
 
-String allTicketsToJson(AllTickets data) => json.encode(data.toJson());
+String allTickersToJson(AllTickers data) => json.encode(data.toJson());
 
-class AllTickets {
+class AllTickers {
   final List<ResponseData> response;
 
-  AllTickets({
+  AllTickers({
     required this.response,
   });
 
-  factory AllTickets.fromJson(Map<String, dynamic> json) => AllTickets(
+  factory AllTickers.fromJson(Map<String, dynamic> json) => AllTickers(
         response: List<ResponseData>.from(
             json["response"].map((x) => ResponseData.fromJson(x))),
       );
@@ -60,50 +60,4 @@ class ResponseData {
         "point_change": pointChange,
         "percentage_change": percentageChange,
       };
-}
-
-enum Sector {
-  BANKING,
-  BOND,
-  DEVELOPMENT_BANK,
-  FINANCE,
-  HOTELS_AND_TOURISM,
-  HYDRO_POWER,
-  INVESTMENT,
-  LIFE_INSURANCE,
-  MANU_PRO,
-  MICROFINANCE,
-  MUTUAL_FUND,
-  NON_LIFE_INSURANCE,
-  OTHERS,
-  TRADING
-}
-
-final sectorValues = EnumValues({
-  "Banking": Sector.BANKING,
-  "Bond": Sector.BOND,
-  "Development Bank": Sector.DEVELOPMENT_BANK,
-  "Finance": Sector.FINANCE,
-  "Hotels And Tourism": Sector.HOTELS_AND_TOURISM,
-  "HydroPower": Sector.HYDRO_POWER,
-  "Investment": Sector.INVESTMENT,
-  "Life Insurance": Sector.LIFE_INSURANCE,
-  "Manu.& Pro.": Sector.MANU_PRO,
-  "Microfinance": Sector.MICROFINANCE,
-  "Mutual Fund": Sector.MUTUAL_FUND,
-  "Non Life Insurance": Sector.NON_LIFE_INSURANCE,
-  "Others": Sector.OTHERS,
-  "Trading": Sector.TRADING
-});
-
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
 }

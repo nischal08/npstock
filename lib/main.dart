@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:npstock/controller/ticket_controller.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:npstock/controller/ticker_controller.dart';
 import 'package:npstock/screens/home_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-void main() async{
+
+void main() async {
   await Hive.initFlutter();
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => TicketController(),
+          create: (_) => TickerController(),
         )
       ],
       child: MaterialApp(

@@ -1,24 +1,22 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:npstock/controller/ticket_controller.dart';
+import 'package:npstock/controller/ticker_controller.dart';
 import 'package:npstock/data/response/status.dart';
 import 'package:npstock/database/database_helper_repository.dart';
 import 'package:npstock/widgets/custom_dropdown.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
-class TicketSelectScreen extends StatelessWidget {
-  TicketSelectScreen({super.key});
+class TickerSelectScreen extends StatelessWidget {
+  TickerSelectScreen({super.key});
   String currentName = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Select ticket"),
+        title: const Text("Select Ticker"),
       ),
-      body: Consumer<TicketController>(builder: (context, provider, __) {
-        switch (provider.allTicket.status) {
+      body: Consumer<TickerController>(builder: (context, provider, __) {
+        switch (provider.allTicker.status) {
           case Status.LOADING:
             return const Center(
               child: CircularProgressIndicator(),
@@ -35,13 +33,13 @@ class TicketSelectScreen extends StatelessWidget {
                 children: [
                   Column(
                     children: [
-                      const Text("Select Ticket:",
+                      const Text("Select Ticker:",
                           style: TextStyle(fontSize: 20)),
                       const SizedBox(
                         width: 16,
                       ),
                       CustomDropdown(
-                        items: provider.allTicket.data!.response
+                        items: provider.allTicker.data!.response
                             .map((e) => e.tickerName ?? "N?A")
                             .toList(),
                         onChanged: (String newValue) {
@@ -55,20 +53,21 @@ class TicketSelectScreen extends StatelessWidget {
                   ),
                   ElevatedButton(
                     onPressed: () async {
-                      debugger();
                       String tickerName = provider
-                          .allTicket
+                          .allTicker
                           .data!
-                          .response[provider.allTicket.data!.response
+                          .response[provider.allTicker.data!.response
                               .map((e) => e.tickerName ?? "N?A")
                               .toList()
                               .indexOf(currentName)]
                           .ticker;
                       if (currentName.isNotEmpty) {
-                        await DatabaseHelperRepository().addTicket(tickerName);
-                        Provider.of<TicketController>(context, listen: false)
-                            .getUserTicket();
-                        Navigator.pop(context);
+                        await DatabaseHelperRepository().addTicker(tickerName);
+                        if (context.mounted) {
+                          Provider.of<TickerController>(context, listen: false)
+                              .getUserTicker(userNotifier: true);
+                          Navigator.pop(context);
+                        }
                       }
                     },
                     child: const Text("Submit"),

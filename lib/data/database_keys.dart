@@ -3,6 +3,5 @@ class DatabaseBoxId {
 }
 
 class DatabaseBoxKeys {
-  static const String ticket = "ticket";
-
+  static const String Ticker = "Ticker";
 }
