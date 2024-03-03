@@ -7,4 +7,6 @@ class AppColors {
   static const Color blue = Colors.blue;
   static const Color lightGrey = Color(0xffe9eff5);
   static const Color scaffoldBgColor = Color(0xfff7f8fc);
+  static const Color disabledButtonColor = Color(0xffE5E8EB);
+
 }

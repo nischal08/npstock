@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:npstock/controller/ticker_controller.dart';
 import 'package:npstock/screens/home_screen.dart';
+import 'package:npstock/styles/themes.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -24,10 +25,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
+        theme: theme,
         home: const HomeScreen(),
       ),
     );

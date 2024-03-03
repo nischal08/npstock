@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 
 class CustomDropdown extends StatefulWidget {
   final List<String> items;
+  final String hintText;
   final Function(String) onChanged;
 
   const CustomDropdown(
-      {super.key, required this.items, required this.onChanged});
+      {super.key,
+      required this.items,
+      required this.onChanged,
+      required this.hintText});
 
   @override
   State<CustomDropdown> createState() => _CustomDropdownState();
@@ -30,7 +34,8 @@ class _CustomDropdownState extends State<CustomDropdown> {
       ),
       child: DropdownButton<String>(
         isExpanded: true,
-        value: currentValue,
+        // value: currentValue,
+        hint: Text(widget.hintText),
         items: widget.items.map((String item) {
           return DropdownMenuItem<String>(
             value: item,

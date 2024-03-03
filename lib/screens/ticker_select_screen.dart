@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:npstock/controller/ticker_controller.dart';
 import 'package:npstock/data/response/status.dart';
 import 'package:npstock/database/database_helper_repository.dart';
+import 'package:npstock/styles/app_colors.dart';
 import 'package:npstock/widgets/custom_dropdown.dart';
+import 'package:npstock/widgets/general_elevated_button.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
@@ -12,8 +14,12 @@ class TickerSelectScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xfff7f8fc),
       appBar: AppBar(
-        title: const Text("Select Ticker"),
+        scrolledUnderElevation: 0,
+        title: const Text("TICKER"),
+        backgroundColor: AppColors.blue,
+        foregroundColor: Colors.white,
       ),
       body: Consumer<TickerController>(builder: (context, provider, __) {
         switch (provider.allTicker.status) {
@@ -32,13 +38,24 @@ class TickerSelectScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("Select Ticker:",
-                          style: TextStyle(fontSize: 20)),
                       const SizedBox(
-                        width: 16,
+                        height: 20,
+                      ),
+                      const Text(
+                        "Select Ticker",
+                        style: TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textGrey,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
                       ),
                       CustomDropdown(
+                        hintText: 'Select the ticker',
                         items: provider.allTicker.data!.response
                             .map((e) => e.tickerName ?? "N?A")
                             .toList(),
@@ -51,26 +68,10 @@ class TickerSelectScreen extends StatelessWidget {
                   const SizedBox(
                     height: 16,
                   ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      String tickerName = provider
-                          .allTicker
-                          .data!
-                          .response[provider.allTicker.data!.response
-                              .map((e) => e.tickerName ?? "N?A")
-                              .toList()
-                              .indexOf(currentName)]
-                          .ticker;
-                      if (currentName.isNotEmpty) {
-                        await DatabaseHelperRepository().addTicker(tickerName);
-                        if (context.mounted) {
-                          Provider.of<TickerController>(context, listen: false)
-                              .getUserTicker(userNotifier: true);
-                          Navigator.pop(context);
-                        }
-                      }
-                    },
-                    child: const Text("Submit"),
+                  GeneralElevatedButton(
+                    onPressed: () => onSubmit(context, provider: provider),
+                    title: "Submit",
+                    isMinimumWidth: true,
                   )
                 ],
               ),
@@ -80,5 +81,24 @@ class TickerSelectScreen extends StatelessWidget {
         }
       }),
     );
+  }
+
+  onSubmit(context, {required TickerController provider}) async {
+    String tickerName = provider
+        .allTicker
+        .data!
+        .response[provider.allTicker.data!.response
+            .map((e) => e.tickerName ?? "N?A")
+            .toList()
+            .indexOf(currentName)]
+        .ticker;
+    if (currentName.isNotEmpty) {
+      await DatabaseHelperRepository().addTicker(tickerName);
+      if (context.mounted) {
+        Provider.of<TickerController>(context, listen: false)
+            .getUserTicker(userNotifier: true);
+        Navigator.pop(context);
+      }
+    }
   }
 }
