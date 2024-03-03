@@ -1,6 +1,5 @@
 // ignore_for_file: must_be_immutable
 
-
 import 'package:flutter/material.dart';
 import 'package:npstock/styles/app_colors.dart';
 import 'package:npstock/styles/text_styles.dart';
@@ -54,12 +53,12 @@ class GeneralTextButton extends StatelessWidget {
     if (textStyle == null) {
       if (isSmallText) {
         textStyle = smallText.copyWith(
-          color: fgColor ?? AppColors.primaryGreen,
+          color: fgColor ?? AppColors.green,
           fontWeight: FontWeight.w600,
         );
       } else {
         textStyle = bodyText.copyWith(
-          color: fgColor ?? AppColors.primaryGreen,
+          color: fgColor ?? AppColors.green,
           fontWeight: fontWeight,
         );
       }
@@ -76,7 +75,7 @@ class GeneralTextButton extends StatelessWidget {
               MaterialStateProperty.all(bgColor ?? Colors.transparent),
           side: MaterialStateProperty.all<BorderSide>(
             BorderSide(
-              color: borderColor ?? AppColors.primaryGreen,
+              color: borderColor ?? AppColors.green,
               width: borderSize ?? 1,
             ),
           ),
@@ -89,7 +88,7 @@ class GeneralTextButton extends StatelessWidget {
         onPressed: (isDisabled || loading) ? null : onPressed,
         child: loading
             ? const CircularProgressIndicator(
-                color: AppColors.primaryGreen,
+                color: AppColors.green,
               )
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,

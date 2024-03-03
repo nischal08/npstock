@@ -10,6 +10,22 @@ class TickerController extends ChangeNotifier {
   ApiResponse<WatchList> userTicker = ApiResponse.loading();
   TickerApi tickerApi = TickerApi();
   List<String> allUserTicker = [];
+  List durationNames = [
+    "1D",
+    "1M",
+    "3M",
+    "1Y",
+    "5Y",
+    "All",
+  ];
+
+  String currentDuration = "1D";
+
+  setCurrentDuration(String durationName) {
+    currentDuration = durationName;
+    notifyListeners();
+  }
+
   Future<void> getAllTicker() async {
     // allTicker = ApiResponse.loading();
     await TickerApi().getAllTicker().then((value) {
@@ -27,6 +43,7 @@ class TickerController extends ChangeNotifier {
     }
     dynamic allTickerDb = await DatabaseHelperRepository().getAllTicker();
     if (allTickerDb != null) {
+      allUserTicker = allTickerDb;
       await TickerApi().getUserTicker(allTickerDb).then((value) {
         userTicker = ApiResponse.completed(value);
         notifyListeners();
