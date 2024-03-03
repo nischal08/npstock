@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final allTickers = allTickersFromJson(jsonString);
-
 import 'dart:convert';
 
 AllTickers allTickersFromJson(String str) =>

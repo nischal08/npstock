@@ -3,5 +3,5 @@ class DatabaseBoxId {
 }
 
 class DatabaseBoxKeys {
-  static const String Ticker = "Ticker";
+  static const String ticker = "Ticker";
 }

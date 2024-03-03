@@ -158,7 +158,7 @@ class DetailScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: AppSizes.paddingLg * 2,
                     ),
                     const EachInfoItem(
