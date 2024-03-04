@@ -3,7 +3,7 @@ import 'package:npstock/controller/detail_controller.dart';
 import 'package:npstock/controller/ticker_controller.dart';
 import 'package:npstock/data/response/status.dart';
 import 'package:npstock/model/watch_list_model.dart';
-import 'package:npstock/screens/home_screen/widgets/home_ticker_info_item.dart';
+import 'package:npstock/screens/home/widgets/home_ticker_info_item.dart';
 import 'package:npstock/screens/ticker_select_screen.dart';
 import 'package:npstock/styles/app_colors.dart';
 import 'package:provider/provider.dart';

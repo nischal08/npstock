@@ -68,9 +68,7 @@ class GeneralElevatedButton extends StatelessWidget {
         style: ButtonStyle(
           elevation: MaterialStateProperty.all(elevation ?? 0),
           backgroundColor: MaterialStateProperty.all(
-            isDisabled
-                ? AppColors.disabledButtonColor
-                : bgColor ?? AppColors.blue,
+            isDisabled ? AppColors.disabledButton : bgColor ?? AppColors.blue,
           ),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(

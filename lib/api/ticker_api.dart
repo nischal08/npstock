@@ -1,11 +1,8 @@
 import 'dart:developer';
-
 import 'package:npstock/api/api_manager.dart';
 import 'package:npstock/data/app_urls.dart';
 import 'package:npstock/data/enum/request_type.dart';
 import 'package:npstock/model/all_tickers_model.dart';
-import 'package:npstock/model/securities_chart_info_model.dart';
-import 'package:npstock/model/securities_stats_model.dart';
 import 'package:npstock/model/watch_list_model.dart';
 
 class TickerApi {

@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:npstock/model/chart_data_model.dart';
 import 'package:npstock/model/watch_list_model.dart';
-import 'package:npstock/screens/detail_screen.dart';
+import 'package:npstock/screens/detail/detail_screen.dart';
 import 'package:npstock/styles/app_colors.dart';
 import 'package:npstock/widgets/chart_widget.dart';
 

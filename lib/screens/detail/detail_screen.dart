@@ -5,6 +5,7 @@ import 'package:npstock/controller/detail_controller.dart';
 import 'package:npstock/data/response/api_response.dart';
 import 'package:npstock/data/response/status.dart';
 import 'package:npstock/model/securities_stats_model.dart';
+import 'package:npstock/screens/detail/widgets/disabled_slider.dart';
 import 'package:npstock/styles/app_colors.dart';
 import 'package:npstock/styles/app_sizes.dart';
 import 'package:npstock/styles/text_styles.dart';
@@ -147,7 +148,7 @@ class DetailScreen extends StatelessWidget {
                                           ),
                                           decoration: BoxDecoration(
                                             color: e == provider.currentDuration
-                                                ? AppColors.selectedChipColor
+                                                ? AppColors.selectedChip
                                                 : null,
                                             borderRadius:
                                                 const BorderRadius.all(
@@ -196,6 +197,94 @@ class DetailScreen extends StatelessWidget {
                                 value:
                                     securitiesStatsModel.marketCap.toString(),
                               ),
+                              const SizedBox(
+                                height: AppSizes.paddingLg * 2,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  const Text(
+                                    "Market Range",
+                                    style: TextStyle(
+                                      color: AppColors.textGrey,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 6,
+                                    ),
+                                    decoration: const BoxDecoration(
+                                      color: AppColors.selectedChip,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(4),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      "24hr",
+                                      style: smallText.copyWith(
+                                          color: AppColors.textGrey,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              const Row(
+                                children: [
+                                  Text(
+                                    "L",
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  Expanded(
+                                    child: DisabledSlider(
+                                      sliderValue: 0.3,
+                                    ),
+                                  ),
+                                  Text(
+                                    "H",
+                                    style: TextStyle(
+                                      color: Colors.green,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                ],
+                              ),
+
+                              const Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "2,180.00",
+                                    style: TextStyle(
+                                      color: AppColors.textGrey,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    "2,180.00",
+                                    style: TextStyle(
+                                      color: AppColors.textGrey,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                ],
+                              )
                             ],
                           ),
                         ),

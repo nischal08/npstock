@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:npstock/controller/detail_controller.dart';
 import 'package:npstock/controller/ticker_controller.dart';
-import 'package:npstock/screens/home_screen/home_screen.dart';
+import 'package:npstock/screens/home/home_screen.dart';
 import 'package:npstock/styles/themes.dart';
 import 'package:provider/provider.dart';
 
