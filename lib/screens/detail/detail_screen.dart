@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:npstock/controller/detail_controller.dart';
@@ -15,14 +16,38 @@ import 'package:npstock/styles/text_styles.dart';
 import 'package:npstock/widgets/chart_widget.dart';
 import 'package:provider/provider.dart';
 
-// ignore: must_be_immutable
-class DetailScreen extends StatelessWidget {
-  DetailScreen({super.key});
+class DetailScreen extends StatefulWidget {
+  const DetailScreen({super.key});
+
+  @override
+  State<DetailScreen> createState() => _DetailScreenState();
+}
+
+class _DetailScreenState extends State<DetailScreen> {
   String currentName = "";
+  Timer? timer;
+  @override
+  void initState() {
+    super.initState();
+    timer = Timer.periodic(
+      const Duration(milliseconds: 100),
+      (_) {
+        Provider.of<DetailController>(context, listen: false)
+            .getAllOneDayChartData();
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    timer!.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       backgroundColor:AppColors.scaffoldBg,
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.only(
           top: kToolbarHeight,
@@ -34,344 +59,397 @@ class DetailScreen extends StatelessWidget {
                 provider.setCurrentDuration("1d");
               },
               itemBuilder: (context, index) {
-                return Builder(
-                  builder: (context) {
-                    ApiResponse<SecuritiesStatsModel> apiResponseModel =
-                        provider
-                            .allStats[provider.allStats.keys.toList()[index]]!;
-                    switch (apiResponseModel.status) {
-                      case Status.LOADING:
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
+                return Stack(
+                  children: [
+                    Builder(
+                      builder: (context) {
+                        ApiResponse<SecuritiesStatsModel> apiResponseModel =
+                            provider.allStats[
+                                provider.allStats.keys.toList()[index]]!;
+                        switch (apiResponseModel.status) {
+                          case Status.LOADING:
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
 
-                      case Status.ERROR:
-                        return const Center(child: Text("Server Error"));
+                          case Status.ERROR:
+                            return const Center(child: Text("Server Error"));
 
-                      case Status.COMPLETED:
-                        ResponseSSM securitiesStatsModel =
-                            apiResponseModel.data!.response;
-                        DateTime convertedUpdatedDate =
-                            DateFormat('yy-MM-dd HH-mm-ss')
-                                .parse(securitiesStatsModel.updatedOn);
-                        return SingleChildScrollView(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: AppSizes.paddingLg * 1.5),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Column(
+                          case Status.COMPLETED:
+                            ResponseSSM securitiesStatsModel =
+                                apiResponseModel.data!.response;
+                            DateTime convertedUpdatedDate =
+                                DateFormat('yy-MM-dd HH-mm-ss')
+                                    .parse(securitiesStatsModel.updatedOn);
+                            return SingleChildScrollView(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: AppSizes.paddingLg * 1.5),
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const SizedBox(
-                                      height: 8,
-                                    ),
-                                    Text(
-                                      securitiesStatsModel.ticker,
-                                      style: const TextStyle(
-                                        fontSize: 22,
-                                        height: 1,
-                                        fontWeight: FontWeight.w500,
-                                        color: AppColors.textDarkGrey,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 4,
-                                    ),
-                                    Text(
-                                      securitiesStatsModel.ltp.toString(),
-                                      style: const TextStyle(
-                                        fontSize: 34,
-                                        height: 1,
-                                        fontWeight: FontWeight.w700,
-                                        color: AppColors.textGrey,
-                                      ),
-                                    ),
-                                    // const SizedBox(
-                                    //   height: 2,
-                                    // ),
-                                    Row(
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
+                                        const SizedBox(
+                                          height: 8,
+                                        ),
                                         Text(
-                                          "${securitiesStatsModel.pointChange.isNegative ? "-" : "+"}${securitiesStatsModel.pointChange.toString()}",
-                                          style: TextStyle(
-                                            fontSize: 30,
-                                            color: securitiesStatsModel
-                                                        .pointChange <
-                                                    0
-                                                ? Colors.red
-                                                : AppColors.green,
+                                          securitiesStatsModel.ticker,
+                                          style: const TextStyle(
+                                            fontSize: 22,
+                                            height: 1,
                                             fontWeight: FontWeight.w500,
+                                            color: AppColors.textDarkGrey,
                                           ),
                                         ),
                                         const SizedBox(
-                                          width: AppSizes.paddingLg,
+                                          height: 4,
                                         ),
                                         Text(
-                                          "${securitiesStatsModel.percentageChange.isNegative ? "-" : "+"}${securitiesStatsModel.percentageChange.toString()}%",
-                                          style: TextStyle(
-                                            fontSize: 30,
-                                            fontWeight: FontWeight.w500,
-                                            color: securitiesStatsModel
-                                                    .percentageChange.isNegative
-                                                ? Colors.red
-                                                : AppColors.green,
+                                          securitiesStatsModel.ltp.toString(),
+                                          style: const TextStyle(
+                                            fontSize: 34,
+                                            height: 1,
+                                            fontWeight: FontWeight.w700,
+                                            color: AppColors.textGrey,
+                                          ),
+                                        ),
+                                        // const SizedBox(
+                                        //   height: 2,
+                                        // ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "${securitiesStatsModel.pointChange.isNegative ? "-" : "+"}${securitiesStatsModel.pointChange.toString()}",
+                                              style: TextStyle(
+                                                fontSize: 30,
+                                                color: securitiesStatsModel
+                                                            .pointChange <
+                                                        0
+                                                    ? Colors.red
+                                                    : AppColors.green,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: AppSizes.paddingLg,
+                                            ),
+                                            Text(
+                                              "${securitiesStatsModel.percentageChange.isNegative ? "-" : "+"}${securitiesStatsModel.percentageChange.toString()}%",
+                                              style: TextStyle(
+                                                fontSize: 30,
+                                                fontWeight: FontWeight.w500,
+                                                color: securitiesStatsModel
+                                                        .percentageChange
+                                                        .isNegative
+                                                    ? Colors.red
+                                                    : AppColors.green,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+
+                                        // 3 Mar,2023
+                                        Text(
+                                          "As on ${DateFormat("d MMM, yyyy").format(convertedUpdatedDate)} | ${DateFormat("hh:mm").format(convertedUpdatedDate)}",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.grey,
                                           ),
                                         ),
                                       ],
                                     ),
-
-                                    // 3 Mar,2023
-                                    Text(
-                                      "As on ${DateFormat("d MMM, yyyy").format(convertedUpdatedDate)} | ${DateFormat("hh:mm").format(convertedUpdatedDate)}",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w700,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Builder(builder: (context) {
-                                  ApiResponse<SecuritiesChartInfoModel>
-                                      chartData = provider.allChartInfo[provider
-                                              .allStats.keys
-                                              .toList()[index]]![
-                                          provider.currentDuration]!;
-                                  switch (chartData.status) {
-                                    case Status.LOADING:
-                                      return const Center(
-                                        child: CircularProgressIndicator(),
-                                      );
-
-                                    case Status.ERROR:
-                                      return const Center(
-                                        child: Text("Error"),
-                                      );
-
-                                    case Status.COMPLETED:
-                                      return SizedBox(
-                                        height: 200,
-                                        child: ChartWidget(
-                                          chartData: [
-                                            ...chartData
-                                                .data!.response.chartData
-                                                .map(
-                                              (e) => ChartDataModel(
-                                                e.timestamp,
-                                                e.value,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      );
-                                    default:
-                                      return const SizedBox.shrink();
-                                  }
-                                }),
-                                const SizedBox(
-                                  height: AppSizes.paddingLg,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: provider.durationNames
-                                      .map(
-                                        (e) => GestureDetector(
-                                          onTap: () {
-                                            provider.setCurrentDuration(e);
-                                          },
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 12,
-                                              vertical: 6,
+                                    Builder(builder: (context) {
+                                      ApiResponse<SecuritiesChartInfoModel>
+                                          chartData = provider.allChartInfo[
+                                                  provider
+                                                      .allStats.keys
+                                                      .toList()[index]]![
+                                              provider.currentDuration]!;
+                                      switch (chartData.status) {
+                                        case Status.ERROR:
+                                          return const SizedBox(
+                                            height: 200,
+                                            child: Center(
+                                              child: Text("Server Error"),
                                             ),
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  e == provider.currentDuration
-                                                      ? AppColors.selectedChip
-                                                      : null,
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                Radius.circular(4),
-                                              ),
-                                            ),
-                                            child: Text(
-                                              e == "all"
-                                                  ? "All"
-                                                  : e.toString().toUpperCase(),
-                                              style: smallText.copyWith(
-                                                  color: AppColors.textGrey,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500),
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                      .toList(),
-                                ),
-                                const SizedBox(
-                                  height: AppSizes.paddingLg * 2,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    EachInfoItem(
-                                      title: "Shares Traded",
-                                      value: securitiesStatsModel.sharesTraded
-                                          .toString(),
-                                    ),
-                                    EachInfoItem(
-                                      title: "Volume",
-                                      value: securitiesStatsModel.volume == 0.0
-                                          ? "N/A"
-                                          : securitiesStatsModel.volume
-                                              .toString(),
-                                      isRowAligmentEnd: true,
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: AppSizes.paddingLg * 2,
-                                ),
-                                EachInfoItem(
-                                  title: "Market Cap",
-                                  value: securitiesStatsModel.marketCap == 0
-                                      ? "N/A"
-                                      : securitiesStatsModel.marketCap
-                                          .toString(),
-                                ),
-                                const SizedBox(
-                                  height: AppSizes.paddingLg * 2,
-                                ),
-                                Builder(builder: (context) {
-                                  ApiResponse<MarketRangeModel> marketData =
-                                      provider.allMarketRange[provider
-                                          .allStats.keys
-                                          .toList()[index]]!;
-                                  switch (marketData.status) {
-                                    case Status.LOADING:
-                                      return const Center(
-                                        child: CircularProgressIndicator(),
-                                      );
+                                          );
 
-                                    case Status.ERROR:
-                                      return const SizedBox.shrink();
+                                        case Status.COMPLETED:
+                                        case Status.LOADING
+                                            when chartData.data != null:
+                                          return SizedBox(
+                                            height: 200,
+                                            child: ChartWidget(
+                                              chartData: [
+                                                ...chartData
+                                                    .data!.response.chartData
+                                                    .map(
+                                                  (e) => ChartDataModel(
+                                                    e.timestamp,
+                                                    e.value,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          );
 
-                                    case Status.COMPLETED:
-                                      return Column(
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: [
-                                              const Text(
-                                                "Market Range",
-                                                style: TextStyle(
-                                                  color: AppColors.textGrey,
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                width: 8,
-                                              ),
-                                              Container(
+                                        case Status.LOADING:
+                                          return const SizedBox(
+                                            height: 200,
+                                            child: Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            ),
+                                          );
+                                        default:
+                                          return const SizedBox.shrink();
+                                      }
+                                    }),
+                                    const SizedBox(
+                                      height: AppSizes.paddingLg,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: provider.durationNames
+                                          .map(
+                                            (e) => GestureDetector(
+                                              onTap: () {
+                                                provider.setCurrentDuration(e);
+                                              },
+                                              child: Container(
                                                 padding:
                                                     const EdgeInsets.symmetric(
                                                   horizontal: 12,
                                                   vertical: 6,
                                                 ),
-                                                decoration: const BoxDecoration(
-                                                  color: AppColors.selectedChip,
+                                                decoration: BoxDecoration(
+                                                  color: e ==
+                                                          provider
+                                                              .currentDuration
+                                                      ? AppColors.selectedChip
+                                                      : null,
                                                   borderRadius:
-                                                      BorderRadius.all(
+                                                      const BorderRadius.all(
                                                     Radius.circular(4),
                                                   ),
                                                 ),
                                                 child: Text(
-                                                  "24hr",
+                                                  e == "all"
+                                                      ? "All"
+                                                      : e
+                                                          .toString()
+                                                          .toUpperCase(),
                                                   style: smallText.copyWith(
                                                       color: AppColors.textGrey,
-                                                      fontSize: 18,
+                                                      fontSize: 16,
                                                       fontWeight:
                                                           FontWeight.w500),
                                                 ),
-                                              )
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              const Text(
-                                                "L",
-                                                style: TextStyle(
-                                                    color: Colors.red,
-                                                    fontSize: 18,
-                                                    fontWeight:
-                                                        FontWeight.w500),
                                               ),
-                                              Expanded(
-                                                child: DisabledSlider(
-                                                  sliderValue: marketData.data!
-                                                      .response.percentile24H,
-                                                ),
-                                              ),
-                                              const Text(
-                                                "H",
-                                                style: TextStyle(
-                                                  color: Colors.green,
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 8,
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                marketData.data!.response.low24H
-                                                    .toString(),
-                                                style: const TextStyle(
-                                                  color: AppColors.textGrey,
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              Text(
-                                                marketData
-                                                    .data!.response.high24H
-                                                    .toString(),
-                                                style: const TextStyle(
-                                                  color: AppColors.textGrey,
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              )
-                                            ],
+                                            ),
                                           )
-                                        ],
-                                      );
-                                    default:
-                                      return const SizedBox.shrink();
-                                  }
-                                }),
-                              ],
+                                          .toList(),
+                                    ),
+                                    const SizedBox(
+                                      height: AppSizes.paddingLg * 2,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        EachInfoItem(
+                                          title: "Shares Traded",
+                                          value: securitiesStatsModel
+                                              .sharesTraded
+                                              .toString(),
+                                        ),
+                                        EachInfoItem(
+                                          title: "Volume",
+                                          value:
+                                              securitiesStatsModel.volume == 0.0
+                                                  ? "N/A"
+                                                  : securitiesStatsModel.volume
+                                                      .toString(),
+                                          isRowAligmentEnd: true,
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: AppSizes.paddingLg * 2,
+                                    ),
+                                    EachInfoItem(
+                                      title: "Market Cap",
+                                      value: securitiesStatsModel.marketCap == 0
+                                          ? "N/A"
+                                          : securitiesStatsModel.marketCap
+                                              .toString(),
+                                    ),
+                                    const SizedBox(
+                                      height: AppSizes.paddingLg * 2,
+                                    ),
+                                    Builder(builder: (context) {
+                                      ApiResponse<MarketRangeModel> marketData =
+                                          provider.allMarketRange[provider
+                                              .allStats.keys
+                                              .toList()[index]]!;
+                                      switch (marketData.status) {
+                                        case Status.LOADING:
+                                          return const Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+
+                                        case Status.ERROR:
+                                          return const SizedBox.shrink();
+
+                                        case Status.COMPLETED:
+                                          return Column(
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  const Text(
+                                                    "Market Range",
+                                                    style: TextStyle(
+                                                      color: AppColors.textGrey,
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 8,
+                                                  ),
+                                                  Container(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                      horizontal: 12,
+                                                      vertical: 6,
+                                                    ),
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                      color: AppColors
+                                                          .selectedChip,
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                        Radius.circular(4),
+                                                      ),
+                                                    ),
+                                                    child: Text(
+                                                      "24hr",
+                                                      style: smallText.copyWith(
+                                                          color: AppColors
+                                                              .textGrey,
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                              Row(
+                                                children: [
+                                                  const Text(
+                                                    "L",
+                                                    style: TextStyle(
+                                                        color: Colors.red,
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  ),
+                                                  Expanded(
+                                                    child: DisabledSlider(
+                                                      sliderValue: marketData
+                                                          .data!
+                                                          .response
+                                                          .percentile24H,
+                                                    ),
+                                                  ),
+                                                  const Text(
+                                                    "H",
+                                                    style: TextStyle(
+                                                      color: Colors.green,
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 8,
+                                                  ),
+                                                ],
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    marketData
+                                                        .data!.response.low24H
+                                                        .toString(),
+                                                    style: const TextStyle(
+                                                      color: AppColors.textGrey,
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    marketData
+                                                        .data!.response.high24H
+                                                        .toString(),
+                                                    style: const TextStyle(
+                                                      color: AppColors.textGrey,
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  )
+                                                ],
+                                              )
+                                            ],
+                                          );
+                                        default:
+                                          return const SizedBox.shrink();
+                                      }
+                                    }),
+                                  ],
+                                ),
+                              ),
+                            );
+                          default:
+                            return const SizedBox.shrink();
+                        }
+                      },
+                    ),
+                    Positioned(
+                      right: 16,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: AppColors.lightGrey,
+                              borderRadius: BorderRadius.circular(100),
                             ),
-                          ),
-                        );
-                      default:
-                        return const SizedBox.shrink();
-                    }
-                  },
+                            child: const Icon(
+                              Icons.arrow_back,
+                              color: AppColors.blue,
+                              size: 22,
+                            )),
+                      ),
+                    )
+                  ],
                 );
               });
         }),

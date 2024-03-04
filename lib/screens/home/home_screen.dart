@@ -131,25 +131,29 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   case Status.COMPLETED:
                     return Expanded(
-                      child: ListView.separated(
-                        itemCount: provider.userTicker.data!.response.length,
-                        separatorBuilder: (context, index) =>
-                            const SizedBox(height: 10),
-                        itemBuilder: (context, index) {
-                          ResponseDataWL responseData =
-                              provider.userTicker.data!.response[index];
-                          return HomeTickerInfoItem(
-                            responseData: responseData,
-                            isBottomPadding: index ==
-                                provider.userTicker.data!.response.length - 1,
-                            showdelete: provider.showDelete,
-                            onDelete: () {
-                              Provider.of<TickerController>(context,
-                                      listen: false)
-                                  .deleteUserTicker(index);
-                            },
-                          );
-                        },
+                      child: MediaQuery.removePadding(
+                        context: context,
+                        removeTop: true,
+                        child: ListView.separated(
+                          itemCount: provider.userTicker.data!.response.length,
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: 10),
+                          itemBuilder: (context, index) {
+                            ResponseDataWL responseData =
+                                provider.userTicker.data!.response[index];
+                            return HomeTickerInfoItem(
+                              responseData: responseData,
+                              isBottomPadding: index ==
+                                  provider.userTicker.data!.response.length - 1,
+                              showdelete: provider.showDelete,
+                              onDelete: () {
+                                Provider.of<TickerController>(context,
+                                        listen: false)
+                                    .deleteUserTicker(index);
+                              },
+                            );
+                          },
+                        ),
                       ),
                     );
                   default:

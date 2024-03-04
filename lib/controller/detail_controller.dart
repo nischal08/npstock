@@ -90,6 +90,9 @@ class DetailController extends ChangeNotifier {
     dynamic allTickerDb = await DatabaseHelperRepository().getAllTicker();
     if (allTickerDb != null) {
       for (String ticker in allTickerDb) {
+        allChartInfo[ticker]!["1d"] =
+            ApiResponse.loading(allChartInfo[ticker]!["1d"]!.data!);
+        notifyListeners();
         await detailApi
             .getSecuritiesChartInfo(ticker, duration: "1d")
             .then((value) {
