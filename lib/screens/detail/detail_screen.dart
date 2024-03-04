@@ -238,8 +238,9 @@ class DetailScreen extends StatelessWidget {
                               ),
                               EachInfoItem(
                                 title: "Market Cap",
-                                value:
-                                    securitiesStatsModel.marketCap.toString(),
+                                value: securitiesStatsModel.marketCap == 0
+                                    ? "N/A"
+                                    : securitiesStatsModel.marketCap.toString(),
                               ),
                               const SizedBox(
                                 height: AppSizes.paddingLg * 2,
