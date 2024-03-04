@@ -30,9 +30,17 @@ class ChartWidget extends StatelessWidget {
                 dataSource: chartData,
                 xValueMapper: (ChartDataModel data, _) => data.x,
                 yValueMapper: (ChartDataModel data, _) => data.y,
-                color: Colors.green[100],
+                // color: Colors.green[100],
                 borderColor: Colors.green,
                 borderWidth: 2,
+                gradient: LinearGradient(
+                  colors: <Color>[
+                    Colors.green[200]!, // Top color
+                    Colors.white, // Bottom color
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
               )
             ],
             plotAreaBorderWidth: 0,
