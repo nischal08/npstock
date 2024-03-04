@@ -11,7 +11,8 @@ import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class TickerSelectScreen extends StatelessWidget {
-  TickerSelectScreen({super.key});
+ 
+  TickerSelectScreen({super.key, });
   String currentName = "";
   @override
   Widget build(BuildContext context) {

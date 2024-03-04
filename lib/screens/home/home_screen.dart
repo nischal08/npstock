@@ -142,6 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ResponseDataWL responseData =
                                 provider.userTicker.data!.response[index];
                             return HomeTickerInfoItem(
+                              index: index,
                               responseData: responseData,
                               isBottomPadding: index ==
                                   provider.userTicker.data!.response.length - 1,

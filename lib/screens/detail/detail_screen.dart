@@ -17,7 +17,8 @@ import 'package:npstock/widgets/chart_widget.dart';
 import 'package:provider/provider.dart';
 
 class DetailScreen extends StatefulWidget {
-  const DetailScreen({super.key});
+  final int index;
+  const DetailScreen({super.key, required this.index});
 
   @override
   State<DetailScreen> createState() => _DetailScreenState();
@@ -26,9 +27,11 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreenState extends State<DetailScreen> {
   String currentName = "";
   Timer? timer;
+  late PageController pageController;
   @override
   void initState() {
     super.initState();
+    pageController = PageController(initialPage: widget.index);
     timer = Timer.periodic(
       const Duration(milliseconds: 100),
       (_) {
@@ -54,6 +57,7 @@ class _DetailScreenState extends State<DetailScreen> {
         ),
         child: Consumer<DetailController>(builder: (context, provider, __) {
           return PageView.builder(
+              controller: pageController,
               itemCount: provider.allStats.keys.length,
               onPageChanged: (_) {
                 provider.setCurrentDuration("1d");

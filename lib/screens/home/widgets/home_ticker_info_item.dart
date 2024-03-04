@@ -7,6 +7,7 @@ import 'package:npstock/styles/app_colors.dart';
 import 'package:npstock/widgets/chart_widget.dart';
 
 class HomeTickerInfoItem extends StatelessWidget {
+  final int index;
   final bool showdelete;
   final VoidCallback onDelete;
   const HomeTickerInfoItem({
@@ -15,6 +16,7 @@ class HomeTickerInfoItem extends StatelessWidget {
     required this.isBottomPadding,
     required this.showdelete,
     required this.onDelete,
+    required this.index,
   });
 
   final ResponseDataWL responseData;
@@ -26,7 +28,7 @@ class HomeTickerInfoItem extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => DetailScreen(),
+            builder: (context) => DetailScreen(index: index),
           ),
         );
       },
