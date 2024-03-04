@@ -18,7 +18,7 @@ class DetailController extends ChangeNotifier {
     "all",
   ];
 
-  String currentDuration = "1D";
+  String currentDuration = "1d";
 
   setCurrentDuration(String durationName) {
     currentDuration = durationName;
@@ -26,16 +26,21 @@ class DetailController extends ChangeNotifier {
   }
 
   Map<String, ApiResponse<SecuritiesStatsModel>> allStats = {};
-  Map<String, ApiResponse<SecuritiesChartInfoModel>> allChartInfo = {};
+  Map<String, Map<String, ApiResponse<SecuritiesChartInfoModel>>> allChartInfo =
+      {};
   getAllStats({bool userNotifier = true}) async {
     dynamic allTickerDb = await DatabaseHelperRepository().getAllTicker();
     if (allTickerDb != null) {
       for (String ticker in allTickerDb) {
-        if (userNotifier) {
-          allStats[ticker] = ApiResponse.loading();
+        allChartInfo[ticker] = {};
+        allStats[ticker] = ApiResponse.loading();
+        if (userNotifier) notifyListeners();
+        for (String name in durationNames) {
+          allChartInfo[ticker]![name] = ApiResponse.loading();
           if (userNotifier) notifyListeners();
         }
       }
+      log(allChartInfo.toString());
       log(allStats.toString());
       for (String ticker in allTickerDb) {
         await detailApi.getSecuritiesStatsDetail(ticker).then((value) {
@@ -48,42 +53,22 @@ class DetailController extends ChangeNotifier {
           allStats[ticker] = ApiResponse.error(e.toString());
           notifyListeners();
         });
-        await detailApi
-            .getSecuritiesChartInfo(ticker, duration: "1d")
-            .then((value) {
-          allChartInfo[ticker] = ApiResponse.completed(value);
-          notifyListeners();
-        }).onError((e, s) {
-          log(s.toString());
-          log(e.toString());
-          allChartInfo[ticker] = ApiResponse.error(e.toString());
-          notifyListeners();
-        });
+        for (String durationName in durationNames) {
+          await detailApi
+              .getSecuritiesChartInfo(ticker, duration: durationName)
+              .then((value) {
+            allChartInfo[ticker]![durationName] = ApiResponse.completed(value);
+            notifyListeners();
+          }).onError((e, s) {
+            log(s.toString());
+            log(e.toString());
+            allChartInfo[ticker] = {};
+            allChartInfo[ticker]![durationName] =
+                ApiResponse.error(e.toString());
+            notifyListeners();
+          });
+        }
       }
     }
   }
-
-  // getChartInfo({bool userNotifier = true}) async {
-  //   dynamic allTickerDb = await DatabaseHelperRepository().getAllTicker();
-  //   if (allTickerDb != null) {
-  //     for (String ticker in allTickerDb) {
-  //       if (userNotifier) {
-  //         allChartInfo[ticker] = ApiResponse.loading();
-  //         if (userNotifier) notifyListeners();
-  //       }
-  //     }
-  //     log(allChartInfo.toString());
-  //     for (String ticker in allTickerDb) {
-  //       await detailApi.getSecuritiesChartInfo(ticker).then((value) {
-  //         allChartInfo[ticker] = ApiResponse.completed(value);
-  //         notifyListeners();
-  //       }).onError((e, s) {
-  //         log(s.toString());
-  //         log(e.toString());
-  //         allChartInfo[ticker] = ApiResponse.error(e.toString());
-  //         notifyListeners();
-  //       });
-  //     }
-  //   }
-  // }
 }

@@ -21,7 +21,7 @@ class DetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xfff7f8fc),
+      backgroundColor: Colors.white,
       appBar: AppBar(
         scrolledUnderElevation: 0,
         title: const Text("TICKER"),
@@ -36,8 +36,6 @@ class DetailScreen extends StatelessWidget {
                 builder: (context) {
                   ApiResponse<SecuritiesStatsModel> apiResponseModel = provider
                       .allStats[provider.allStats.keys.toList()[index]]!;
-                  ResponseSSM securitiesStatsModel =
-                      apiResponseModel.data!.response;
                   switch (apiResponseModel.status) {
                     case Status.LOADING:
                       return const Center(
@@ -48,6 +46,8 @@ class DetailScreen extends StatelessWidget {
                       return const Center(child: Text("Server Error"));
 
                     case Status.COMPLETED:
+                      ResponseSSM securitiesStatsModel =
+                          apiResponseModel.data!.response;
                       DateTime convertedUpdatedDate =
                           DateFormat('yy-MM-dd HH-mm-ss')
                               .parse(securitiesStatsModel.updatedOn);
@@ -135,9 +135,9 @@ class DetailScreen extends StatelessWidget {
                               ),
                               Builder(builder: (context) {
                                 ApiResponse<SecuritiesChartInfoModel>
-                                    chartData = provider.allChartInfo[provider
-                                        .allStats.keys
-                                        .toList()[index]]!;
+                                    chartData = provider.allChartInfo[
+                                        provider.allStats.keys.toList()[
+                                            index]]![provider.currentDuration]!;
                                 switch (chartData.status) {
                                   case Status.LOADING:
                                     return const Center(
