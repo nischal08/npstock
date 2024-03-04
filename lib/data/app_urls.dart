@@ -5,6 +5,6 @@ class AppUrl {
       "$baseUrl/ticker-page/ticker-stats/[name]";
   static const String watchList = "$baseUrl/home/watchlist";
   static const String chartDataByTimeType =
-      "$baseUrl/ticker-page/chart/NABIL/[name]";
+      "$baseUrl/ticker-page/chart/[name]/[duration]";
   static const String martketRange = "$baseUrl/ticker-page/market-range/[name]";
 }

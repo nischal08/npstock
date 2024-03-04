@@ -22,10 +22,10 @@ class DetailApi {
     }
   }
 
-  Future<SecuritiesChartInfoModel> getSecuritiesChartInfo(String value) async {
+  Future<SecuritiesChartInfoModel> getSecuritiesChartInfo(String value,{required String duration}) async {
     try {
       dynamic response = await _apiManager.request(
-        url: AppUrl.chartDataByTimeType.replaceAll("[name]", value),
+        url: AppUrl.chartDataByTimeType.replaceAll("[name]", value).replaceAll("[duration]", duration),
         requestType: RequestType.get,
       );
       return SecuritiesChartInfoModel.fromJson(response);

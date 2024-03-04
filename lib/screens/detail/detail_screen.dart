@@ -4,11 +4,14 @@ import 'package:intl/intl.dart';
 import 'package:npstock/controller/detail_controller.dart';
 import 'package:npstock/data/response/api_response.dart';
 import 'package:npstock/data/response/status.dart';
+import 'package:npstock/model/chart_data_model.dart';
+import 'package:npstock/model/securities_chart_info_model.dart';
 import 'package:npstock/model/securities_stats_model.dart';
 import 'package:npstock/screens/detail/widgets/disabled_slider.dart';
 import 'package:npstock/styles/app_colors.dart';
 import 'package:npstock/styles/app_sizes.dart';
 import 'package:npstock/styles/text_styles.dart';
+import 'package:npstock/widgets/chart_widget.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
@@ -50,7 +53,9 @@ class DetailScreen extends StatelessWidget {
                               .parse(securitiesStatsModel.updatedOn);
                       return SingleChildScrollView(
                         child: Padding(
-                          padding: const EdgeInsets.all(AppSizes.paddingLg * 2),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: AppSizes.paddingLg,
+                              horizontal: AppSizes.paddingLg * 1.5),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -70,7 +75,7 @@ class DetailScreen extends StatelessWidget {
                                     ),
                                   ),
                                   const SizedBox(
-                                    height: 2,
+                                    height: 4,
                                   ),
                                   Text(
                                     securitiesStatsModel.ltp.toString(),
@@ -81,9 +86,9 @@ class DetailScreen extends StatelessWidget {
                                       color: AppColors.textGrey,
                                     ),
                                   ),
-                                  const SizedBox(
-                                    height: 2,
-                                  ),
+                                  // const SizedBox(
+                                  //   height: 2,
+                                  // ),
                                   Row(
                                     children: [
                                       Text(
@@ -128,9 +133,43 @@ class DetailScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              // ChartWidget(chartData: chartData),
+                              Builder(builder: (context) {
+                                ApiResponse<SecuritiesChartInfoModel>
+                                    chartData = provider.allChartInfo[provider
+                                        .allStats.keys
+                                        .toList()[index]]!;
+                                switch (chartData.status) {
+                                  case Status.LOADING:
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+
+                                  case Status.ERROR:
+                                    return const Center(
+                                      child: Text("Error"),
+                                    );
+
+                                  case Status.COMPLETED:
+                                    return SizedBox(
+                                      height: 200,
+                                      child: ChartWidget(
+                                        chartData: [
+                                          ...chartData.data!.response.chartData
+                                              .map(
+                                            (e) => ChartDataModel(
+                                              e.timestamp,
+                                              e.value,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  default:
+                                    return const SizedBox.shrink();
+                                }
+                              }),
                               const SizedBox(
-                                height: AppSizes.paddingLg * 2,
+                                height: AppSizes.paddingLg ,
                               ),
                               Row(
                                 mainAxisAlignment:
@@ -262,7 +301,6 @@ class DetailScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-
                               const Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,

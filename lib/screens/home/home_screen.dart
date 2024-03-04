@@ -21,8 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     Provider.of<TickerController>(context, listen: false).getAllTicker();
     Provider.of<TickerController>(context, listen: false).getUserTicker();
-    Provider.of<DetailController>(context, listen: false)
-        .getAllStats();
+    Provider.of<DetailController>(context, listen: false).getAllStats();
   }
 
   @override
