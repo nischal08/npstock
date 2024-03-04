@@ -28,16 +28,23 @@ class TickerController extends ChangeNotifier {
   }
 
   setShowDelete({bool? value}) {
-    showDelete = value ?? !showDelete;
-    notifyListeners();
+    if (userTicker.data != null) {
+      if (userTicker.data!.response.isNotEmpty) {
+        showDelete = value ?? !showDelete;
+        notifyListeners();
+      }
+    }
   }
 
   deleteUserTicker(int index) {
     List<ResponseDataWL> userTickerTemp = [...userTicker.data!.response];
     userTickerTemp.removeAt(index);
+    DatabaseHelperRepository().deleteTicker(index);
+    if (userTickerTemp.isEmpty) {
+      showDelete = false;
+    }
     setStateWatchList(
         ApiResponse.completed(WatchList(response: userTickerTemp)));
-    DatabaseHelperRepository().deleteTicker(index);
   }
 
   setStateWatchList(ApiResponse<WatchList> value, {bool noNotifier = false}) {

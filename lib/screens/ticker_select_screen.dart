@@ -46,7 +46,7 @@ class TickerSelectScreen extends StatelessWidget {
                       const Text(
                         "Select Ticker",
                         style: TextStyle(
-                          fontSize: 26,
+                          fontSize: 22,
                           fontWeight: FontWeight.bold,
                           color: AppColors.textGrey,
                         ),

@@ -88,11 +88,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: AppColors.lightGrey,
                         borderRadius: BorderRadius.circular(100),
                       ),
-                      child: const Icon(
-                        Icons.close,
-                        color: AppColors.blue,
-                        size: 22,
-                      ),
+                      child: Consumer<TickerController>(
+                          builder: (context, provider, __) {
+                        return Icon(
+                          provider.showDelete ? Icons.check : Icons.close,
+                          color: AppColors.blue,
+                          size: 22,
+                        );
+                      }),
                     ),
                   )
                 ],
@@ -100,23 +103,33 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(
                 height: 20,
               ),
-              Expanded(
-                child: Consumer<TickerController>(
-                    builder: (context, provider, __) {
-                  switch (provider.userTicker.status) {
-                    case Status.LOADING:
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    case Status.ERROR:
-                      return const Center(child: Text("Error"));
-                    case Status.COMPLETED
-                        when provider.userTicker.data!.response.isEmpty:
-                      return const Center(
-                        child: Text("Please add your Ticker above"),
-                      );
-                    case Status.COMPLETED:
-                      return ListView.separated(
+              Consumer<TickerController>(builder: (context, provider, __) {
+                switch (provider.userTicker.status) {
+                  case Status.LOADING:
+                    return Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.only(top: 150),
+                      child: const CircularProgressIndicator(),
+                    );
+                  case Status.ERROR:
+                    return Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.only(top: 150),
+                      child: Text(provider.userTicker.message!),
+                    );
+                  case Status.COMPLETED
+                      when provider.userTicker.data!.response.isEmpty:
+                    return Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.only(top: 150),
+                      child: const Text(
+                        "Please add your Ticker above",
+                        textAlign: TextAlign.center,
+                      ),
+                    );
+                  case Status.COMPLETED:
+                    return Expanded(
+                      child: ListView.separated(
                         itemCount: provider.userTicker.data!.response.length,
                         separatorBuilder: (context, index) =>
                             const SizedBox(height: 10),
@@ -135,12 +148,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                           );
                         },
-                      );
-                    default:
-                      return const SizedBox.shrink();
-                  }
-                }),
-              )
+                      ),
+                    );
+                  default:
+                    return const SizedBox.shrink();
+                }
+              })
             ],
           )),
     );

@@ -30,7 +30,7 @@ class DetailScreen extends StatelessWidget {
             );
 
           case Status.ERROR:
-            return const Center(child: Text("Error"));
+            return const Center(child: Text("Server Error"));
 
           case Status.COMPLETED:
             return SingleChildScrollView(

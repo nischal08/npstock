@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:npstock/model/chart_data.dart';
 import 'package:npstock/model/watch_list_model.dart';
@@ -94,7 +95,7 @@ class HomeTickerInfoItem extends StatelessWidget {
             const SizedBox(
               width: 2,
             ),
-            const Spacer(),
+            // const Spacer(),
             showdelete
                 ? GestureDetector(
                     onTap: onDelete,
@@ -107,39 +108,62 @@ class HomeTickerInfoItem extends StatelessWidget {
                       ),
                     ),
                   )
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        responseData.ltp.toString(),
-                        style: const TextStyle(
-                          fontSize: 22,
-                          color: AppColors.textGrey,
-                          fontWeight: FontWeight.bold,
+                : Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        AutoSizeText(
+                          responseData.ltp.toString(),
+                          style: const TextStyle(
+                            fontSize: 22,
+                            color: AppColors.textGrey,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          minFontSize: 12,
+                          maxFontSize: 22,
+                          maxLines: 1,
                         ),
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            responseData.pointChange.toString(),
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: AppColors.green,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Flexible(
+                              flex: 1,
+                              child: AutoSizeText(
+                                responseData.pointChange.toString(),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: responseData.pointChange.isNegative
+                                      ? Colors.red
+                                      : AppColors.green,
+                                ),
+                                maxFontSize: 16,
+                                minFontSize: 12,
+                                maxLines: 1,
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            width: 6,
-                          ),
-                          Text(
-                            "${responseData.percentageChange}%",
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: AppColors.green,
+                            const SizedBox(
+                              width: 6,
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                            Flexible(
+                              flex: 1,
+                              child: AutoSizeText(
+                                "${responseData.percentageChange}%",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color:
+                                      responseData.percentageChange.isNegative
+                                          ? Colors.red
+                                          : AppColors.green,
+                                ),
+                                maxFontSize: 16,
+                                minFontSize: 12,
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
           ],
         ),
