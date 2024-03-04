@@ -10,22 +10,8 @@ class TickerController extends ChangeNotifier {
   ApiResponse<WatchListModel> userTicker = ApiResponse.loading();
   TickerApi tickerApi = TickerApi();
   List<String> allUserTicker = [];
-  List durationNames = [
-    "1D",
-    "1M",
-    "3M",
-    "1Y",
-    "5Y",
-    "All",
-  ];
 
-  String currentDuration = "1D";
   bool showDelete = false;
-
-  setCurrentDuration(String durationName) {
-    currentDuration = durationName;
-    notifyListeners();
-  }
 
   setShowDelete({bool? value}) {
     if (userTicker.data != null) {
@@ -61,7 +47,7 @@ class TickerController extends ChangeNotifier {
 
   Future<void> getAllTicker() async {
     // allTicker = ApiResponse.loading();
-    await TickerApi().getAllTicker().then((value) {
+    await tickerApi.getAllTicker().then((value) {
       setStateAllTicker(ApiResponse.completed(value));
     }).onError((error, stackTrace) {
       setStateAllTicker(ApiResponse.error(error.toString()));
@@ -75,7 +61,7 @@ class TickerController extends ChangeNotifier {
     dynamic allTickerDb = await DatabaseHelperRepository().getAllTicker();
     if (allTickerDb != null) {
       allUserTicker = allTickerDb;
-      await TickerApi().getUserTicker(allTickerDb).then((value) {
+      await tickerApi.getUserTicker(allTickerDb).then((value) {
         setStateWatchList(ApiResponse.completed(value));
       }).onError((error, stackTrace) {
         setStateWatchList(ApiResponse.error(error.toString()));

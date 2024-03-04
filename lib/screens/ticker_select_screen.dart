@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:npstock/controller/detail_controller.dart';
 import 'package:npstock/controller/ticker_controller.dart';
 import 'package:npstock/data/response/status.dart';
 import 'package:npstock/database/database_helper_repository.dart';
@@ -97,6 +98,8 @@ class TickerSelectScreen extends StatelessWidget {
       if (context.mounted) {
         Provider.of<TickerController>(context, listen: false)
             .getUserTicker(userNotifier: true);
+        Provider.of<DetailController>(context, listen: false)
+            .getAllStats();
         Navigator.pop(context);
       }
     }

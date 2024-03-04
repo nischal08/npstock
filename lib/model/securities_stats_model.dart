@@ -11,7 +11,7 @@ String securitiesStatsToJson(SecuritiesStatsModel data) =>
     json.encode(data.toJson());
 
 class SecuritiesStatsModel {
-  final Response response;
+  final ResponseSSM response;
 
   SecuritiesStatsModel({
     required this.response,
@@ -19,7 +19,7 @@ class SecuritiesStatsModel {
 
   factory SecuritiesStatsModel.fromJson(Map<String, dynamic> json) =>
       SecuritiesStatsModel(
-        response: Response.fromJson(json["response"]),
+        response: ResponseSSM.fromJson(json["response"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -27,17 +27,17 @@ class SecuritiesStatsModel {
       };
 }
 
-class Response {
+class ResponseSSM {
   final String ticker;
   final double ltp;
-  final int pointChange;
-  final int percentageChange;
-  final double volume;
+  final double pointChange;
+  final double percentageChange;
+  final int volume;
   final int sharesTraded;
   final int marketCap;
   final String updatedOn;
 
-  Response({
+  ResponseSSM({
     required this.ticker,
     required this.ltp,
     required this.pointChange,
@@ -48,15 +48,19 @@ class Response {
     required this.updatedOn,
   });
 
-  factory Response.fromJson(Map<String, dynamic> json) => Response(
+  factory ResponseSSM.fromJson(Map<String, dynamic> json) => ResponseSSM(
         ticker: json["ticker"],
         ltp: json["ltp"]?.toDouble(),
-        pointChange: json["point_change"],
-        percentageChange: json["percentage_change"],
-        volume: json["volume"]?.toDouble(),
+        pointChange: json["point_change"] == null
+            ? 0.0
+            : json["point_change"]!.toDouble(),
+        percentageChange: json["percentage_change"] == null
+            ? 0.0
+            : json["percentage_change"]!.toDouble(),
+        volume: json["volume"]??0,
         sharesTraded: json["shares_traded"],
-        marketCap: json["market_cap"],
-        updatedOn: json["updated_on"],
+        marketCap: json["market_cap"]??0,
+        updatedOn: json["updated_on"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {

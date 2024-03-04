@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:npstock/controller/detail_controller.dart';
 import 'package:npstock/controller/ticker_controller.dart';
 import 'package:npstock/data/response/status.dart';
 import 'package:npstock/model/watch_list_model.dart';
@@ -20,6 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     Provider.of<TickerController>(context, listen: false).getAllTicker();
     Provider.of<TickerController>(context, listen: false).getUserTicker();
+    Provider.of<DetailController>(context, listen: false)
+        .getAllStats();
   }
 
   @override
