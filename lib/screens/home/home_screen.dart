@@ -28,12 +28,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xfff7f8fc),
-      appBar: AppBar(
-        scrolledUnderElevation: 0,
-        title: const Text("NP STOCKS"),
-        backgroundColor: AppColors.blue,
-        foregroundColor: Colors.white,
-      ),
+      // appBar: AppBar(
+      //   scrolledUnderElevation: 0,
+      //   title: const Text("NP STOCKS"),
+      //   backgroundColor: AppColors.blue,
+      //   foregroundColor: Colors.white,
+      // ),
       body: Container(
           padding: const EdgeInsets.symmetric(
             horizontal: 32,
@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
-                height: 20,
+                height: kToolbarHeight,
               ),
               const Text(
                 "My Watchlist",

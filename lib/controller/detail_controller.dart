@@ -85,4 +85,24 @@ class DetailController extends ChangeNotifier {
       }
     }
   }
+
+  getAllOneDayChartData() async {
+    dynamic allTickerDb = await DatabaseHelperRepository().getAllTicker();
+    if (allTickerDb != null) {
+      for (String ticker in allTickerDb) {
+        await detailApi
+            .getSecuritiesChartInfo(ticker, duration: "1d")
+            .then((value) {
+          allChartInfo[ticker]!["1d"] = ApiResponse.completed(value);
+          notifyListeners();
+        }).onError((e, s) {
+          log(s.toString());
+          log(e.toString());
+          allChartInfo[ticker] = {};
+          allChartInfo[ticker]!["1d"] = ApiResponse.error(e.toString());
+          notifyListeners();
+        });
+      }
+    }
+  }
 }
