@@ -31,6 +31,9 @@ class DetailScreen extends StatelessWidget {
       body: Consumer<DetailController>(builder: (context, provider, __) {
         return PageView.builder(
             itemCount: provider.allStats.keys.length,
+            onPageChanged: (_) {
+              provider.setCurrentDuration("1d");
+            },
             itemBuilder: (context, index) {
               return Builder(
                 builder: (context) {
