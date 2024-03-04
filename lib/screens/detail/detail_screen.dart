@@ -33,7 +33,7 @@ class _DetailScreenState extends State<DetailScreen> {
     super.initState();
     pageController = PageController(initialPage: widget.index);
     timer = Timer.periodic(
-      const Duration(milliseconds: 100),
+      const Duration(milliseconds: 1000),
       (_) {
         Provider.of<DetailController>(context, listen: false)
             .getAllOneDayChartData();

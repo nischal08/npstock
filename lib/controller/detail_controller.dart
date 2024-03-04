@@ -47,7 +47,7 @@ class DetailController extends ChangeNotifier {
       log(allChartInfo.toString());
       log(allStats.toString());
       for (String ticker in allTickerDb) {
-        await detailApi.getSecuritiesStatsDetail(ticker).then((value) {
+        detailApi.getSecuritiesStatsDetail(ticker).then((value) {
           allStats[ticker] = ApiResponse.completed(value);
 
           notifyListeners();
@@ -57,7 +57,7 @@ class DetailController extends ChangeNotifier {
           allStats[ticker] = ApiResponse.error(e.toString());
           notifyListeners();
         });
-        await detailApi.getMarketRange(ticker).then((value) {
+        detailApi.getMarketRange(ticker).then((value) {
           allMarketRange[ticker] = ApiResponse.completed(value);
           notifyListeners();
         }).onError((e, s) {
@@ -68,7 +68,7 @@ class DetailController extends ChangeNotifier {
         });
 
         for (String durationName in durationNames) {
-          await detailApi
+          detailApi
               .getSecuritiesChartInfo(ticker, duration: durationName)
               .then((value) {
             allChartInfo[ticker]![durationName] = ApiResponse.completed(value);
@@ -93,9 +93,7 @@ class DetailController extends ChangeNotifier {
         allChartInfo[ticker]!["1d"] =
             ApiResponse.loading(allChartInfo[ticker]!["1d"]!.data!);
         notifyListeners();
-        await detailApi
-            .getSecuritiesChartInfo(ticker, duration: "1d")
-            .then((value) {
+        detailApi.getSecuritiesChartInfo(ticker, duration: "1d").then((value) {
           allChartInfo[ticker]!["1d"] = ApiResponse.completed(value);
           notifyListeners();
         }).onError((e, s) {
