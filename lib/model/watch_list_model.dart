@@ -1,17 +1,18 @@
 import 'dart:convert';
 
-WatchList watchListFromJson(String str) => WatchList.fromJson(json.decode(str));
+WatchListModel watchListFromJson(String str) =>
+    WatchListModel.fromJson(json.decode(str));
 
-String watchListToJson(WatchList data) => json.encode(data.toJson());
+String watchListToJson(WatchListModel data) => json.encode(data.toJson());
 
-class WatchList {
+class WatchListModel {
   final List<ResponseDataWL> response;
 
-  WatchList({
+  WatchListModel({
     required this.response,
   });
 
-  factory WatchList.fromJson(Map<String, dynamic> json) => WatchList(
+  factory WatchListModel.fromJson(Map<String, dynamic> json) => WatchListModel(
         response: List<ResponseDataWL>.from(
             json["response"].map((x) => ResponseDataWL.fromJson(x))),
       );

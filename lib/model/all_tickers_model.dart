@@ -1,18 +1,18 @@
 import 'dart:convert';
 
-AllTickers allTickersFromJson(String str) =>
-    AllTickers.fromJson(json.decode(str));
+AllTickersModel allTickersFromJson(String str) =>
+    AllTickersModel.fromJson(json.decode(str));
 
-String allTickersToJson(AllTickers data) => json.encode(data.toJson());
+String allTickersToJson(AllTickersModel data) => json.encode(data.toJson());
 
-class AllTickers {
+class AllTickersModel {
   final List<ResponseData> response;
 
-  AllTickers({
+  AllTickersModel({
     required this.response,
   });
 
-  factory AllTickers.fromJson(Map<String, dynamic> json) => AllTickers(
+  factory AllTickersModel.fromJson(Map<String, dynamic> json) => AllTickersModel(
         response: List<ResponseData>.from(
             json["response"].map((x) => ResponseData.fromJson(x))),
       );

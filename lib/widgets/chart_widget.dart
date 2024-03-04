@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:npstock/model/chart_data.dart';
+import 'package:npstock/model/chart_data_model.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class ChartWidget extends StatelessWidget {
-  final List<ChartData> chartData;
+  final List<ChartDataModel> chartData;
 
   const ChartWidget({super.key, required this.chartData});
   @override
@@ -11,13 +11,13 @@ class ChartWidget extends StatelessWidget {
     return SfCartesianChart(
       primaryXAxis: const DateTimeAxis(isVisible: false),
       primaryYAxis: const NumericAxis(
-        isVisible: false, 
+        isVisible: false,
       ),
       series: <CartesianSeries>[
-        AreaSeries<ChartData, DateTime>(
+        AreaSeries<ChartDataModel, DateTime>(
           dataSource: chartData,
-          xValueMapper: (ChartData data, _) => data.x,
-          yValueMapper: (ChartData data, _) => data.y,
+          xValueMapper: (ChartDataModel data, _) => data.x,
+          yValueMapper: (ChartDataModel data, _) => data.y,
           color: Colors.green[100],
           borderColor: Colors.green,
           borderWidth: 2,

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:npstock/api/ticker_api.dart';
 import 'package:npstock/data/response/api_response.dart';
 import 'package:npstock/database/database_helper_repository.dart';
-import 'package:npstock/model/all_tickers.dart';
+import 'package:npstock/model/all_tickers_model.dart';
 import 'package:npstock/model/watch_list_model.dart';
 
 class TickerController extends ChangeNotifier {
-  ApiResponse<AllTickers> allTicker = ApiResponse.loading();
-  ApiResponse<WatchList> userTicker = ApiResponse.loading();
+  ApiResponse<AllTickersModel> allTicker = ApiResponse.loading();
+  ApiResponse<WatchListModel> userTicker = ApiResponse.loading();
   TickerApi tickerApi = TickerApi();
   List<String> allUserTicker = [];
   List durationNames = [
@@ -44,15 +44,17 @@ class TickerController extends ChangeNotifier {
       showDelete = false;
     }
     setStateWatchList(
-        ApiResponse.completed(WatchList(response: userTickerTemp)));
+        ApiResponse.completed(WatchListModel(response: userTickerTemp)));
   }
 
-  setStateWatchList(ApiResponse<WatchList> value, {bool noNotifier = false}) {
+  setStateWatchList(ApiResponse<WatchListModel> value,
+      {bool noNotifier = false}) {
     userTicker = value;
     if (!noNotifier) notifyListeners();
   }
 
-  setStateAllTicker(ApiResponse<AllTickers> value, {bool noNotifier = false}) {
+  setStateAllTicker(ApiResponse<AllTickersModel> value,
+      {bool noNotifier = false}) {
     allTicker = value;
     if (!noNotifier) notifyListeners();
   }
@@ -79,7 +81,7 @@ class TickerController extends ChangeNotifier {
         setStateWatchList(ApiResponse.error(error.toString()));
       });
     } else {
-      setStateWatchList(ApiResponse.completed(WatchList(response: [])));
+      setStateWatchList(ApiResponse.completed(WatchListModel(response: [])));
     }
   }
 }
