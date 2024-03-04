@@ -5,6 +5,7 @@ import 'package:npstock/controller/detail_controller.dart';
 import 'package:npstock/data/response/api_response.dart';
 import 'package:npstock/data/response/status.dart';
 import 'package:npstock/model/chart_data_model.dart';
+import 'package:npstock/model/market_range_model.dart';
 import 'package:npstock/model/securities_chart_info_model.dart';
 import 'package:npstock/model/securities_stats_model.dart';
 import 'package:npstock/screens/detail/widgets/disabled_slider.dart';
@@ -245,90 +246,119 @@ class DetailScreen extends StatelessWidget {
                               const SizedBox(
                                 height: AppSizes.paddingLg * 2,
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  const Text(
-                                    "Market Range",
-                                    style: TextStyle(
-                                      color: AppColors.textGrey,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                      vertical: 6,
-                                    ),
-                                    decoration: const BoxDecoration(
-                                      color: AppColors.selectedChip,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(4),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      "24hr",
-                                      style: smallText.copyWith(
-                                          color: AppColors.textGrey,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              const Row(
-                                children: [
-                                  Text(
-                                    "L",
-                                    style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  Expanded(
-                                    child: DisabledSlider(
-                                      sliderValue: 0.3,
-                                    ),
-                                  ),
-                                  Text(
-                                    "H",
-                                    style: TextStyle(
-                                      color: Colors.green,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                ],
-                              ),
-                              const Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "2,180.00",
-                                    style: TextStyle(
-                                      color: AppColors.textGrey,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    "2,180.00",
-                                    style: TextStyle(
-                                      color: AppColors.textGrey,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                ],
-                              )
+                              Builder(builder: (context) {
+                                ApiResponse<MarketRangeModel> marketData =
+                                    provider.allMarketRange[provider
+                                        .allStats.keys
+                                        .toList()[index]]!;
+                                switch (marketData.status) {
+                                  case Status.LOADING:
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+
+                                  case Status.ERROR:
+                                    return const SizedBox.shrink();
+
+                                  case Status.COMPLETED:
+                                    return Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            const Text(
+                                              "Market Range",
+                                              style: TextStyle(
+                                                color: AppColors.textGrey,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 8,
+                                            ),
+                                            Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 12,
+                                                vertical: 6,
+                                              ),
+                                              decoration: const BoxDecoration(
+                                                color: AppColors.selectedChip,
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(4),
+                                                ),
+                                              ),
+                                              child: Text(
+                                                "24hr",
+                                                style: smallText.copyWith(
+                                                    color: AppColors.textGrey,
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            const Text(
+                                              "L",
+                                              style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                            Expanded(
+                                              child: DisabledSlider(
+                                                sliderValue: marketData.data!
+                                                    .response.percentile24H,
+                                              ),
+                                            ),
+                                            const Text(
+                                              "H",
+                                              style: TextStyle(
+                                                color: Colors.green,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 8,
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              marketData.data!.response.low24H
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                color: AppColors.textGrey,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              marketData.data!.response.high24H
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                color: AppColors.textGrey,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    );
+                                  default:
+                                    return const SizedBox.shrink();
+                                }
+                              }),
                             ],
                           ),
                         ),

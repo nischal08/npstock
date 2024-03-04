@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:npstock/api/api_manager.dart';
 import 'package:npstock/data/app_urls.dart';
 import 'package:npstock/data/enum/request_type.dart';
+import 'package:npstock/model/market_range_model.dart';
 import 'package:npstock/model/securities_chart_info_model.dart';
 import 'package:npstock/model/securities_stats_model.dart';
 
@@ -22,10 +23,27 @@ class DetailApi {
     }
   }
 
-  Future<SecuritiesChartInfoModel> getSecuritiesChartInfo(String value,{required String duration}) async {
+  Future<MarketRangeModel> getMarketRange(String value) async {
     try {
       dynamic response = await _apiManager.request(
-        url: AppUrl.chartDataByTimeType.replaceAll("[name]", value).replaceAll("[duration]", duration),
+        url: AppUrl.martketRange.replaceAll("[name]", value),
+        requestType: RequestType.get,
+      );
+      return MarketRangeModel.fromJson(response);
+    } catch (e, s) {
+      log(e.toString());
+      log(s.toString());
+      rethrow;
+    }
+  }
+
+  Future<SecuritiesChartInfoModel> getSecuritiesChartInfo(String value,
+      {required String duration}) async {
+    try {
+      dynamic response = await _apiManager.request(
+        url: AppUrl.chartDataByTimeType
+            .replaceAll("[name]", value)
+            .replaceAll("[duration]", duration),
         requestType: RequestType.get,
       );
       return SecuritiesChartInfoModel.fromJson(response);
