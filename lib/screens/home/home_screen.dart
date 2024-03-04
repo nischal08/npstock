@@ -6,6 +6,7 @@ import 'package:npstock/model/watch_list_model.dart';
 import 'package:npstock/screens/home/widgets/home_ticker_info_item.dart';
 import 'package:npstock/screens/ticker_select_screen.dart';
 import 'package:npstock/styles/app_colors.dart';
+import 'package:npstock/styles/text_styles.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -124,9 +125,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     return Container(
                       alignment: Alignment.center,
                       padding: const EdgeInsets.only(top: 150),
-                      child: const Text(
-                        "Please add your Ticker above",
+                      child: Text(
+                        "Please add your ticker above.",
                         textAlign: TextAlign.center,
+                        style: titleText.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     );
                   case Status.COMPLETED:

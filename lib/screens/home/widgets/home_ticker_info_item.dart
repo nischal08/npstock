@@ -97,21 +97,25 @@ class HomeTickerInfoItem extends StatelessWidget {
             const SizedBox(
               width: 2,
             ),
-            // const Spacer(),
-            showdelete
-                ? GestureDetector(
-                    onTap: onDelete,
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                        size: 30,
-                      ),
-                    ),
-                  )
-                : Expanded(
-                    child: Column(
+            Expanded(
+              child: showdelete
+                  ? Row(
+                      children: [
+                        const Spacer(),
+                        GestureDetector(
+                          onTap: onDelete,
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                              size: 30,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         AutoSizeText(
@@ -166,7 +170,7 @@ class HomeTickerInfoItem extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ),
+            ),
           ],
         ),
       ),
