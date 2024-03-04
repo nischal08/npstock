@@ -10,12 +10,12 @@ import 'package:npstock/model/securities_stats_model.dart';
 class DetailController extends ChangeNotifier {
   DetailApi detailApi = DetailApi();
   List durationNames = [
-    "1D",
-    "1M",
-    "3M",
-    "1Y",
-    "5Y",
-    "All",
+    "1d",
+    "1m",
+    "3m",
+    "1y",
+    "5y",
+    "all",
   ];
 
   String currentDuration = "1D";

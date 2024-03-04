@@ -169,7 +169,7 @@ class DetailScreen extends StatelessWidget {
                                 }
                               }),
                               const SizedBox(
-                                height: AppSizes.paddingLg ,
+                                height: AppSizes.paddingLg,
                               ),
                               Row(
                                 mainAxisAlignment:
@@ -195,7 +195,9 @@ class DetailScreen extends StatelessWidget {
                                             ),
                                           ),
                                           child: Text(
-                                            e,
+                                            e == "all"
+                                                ? "All"
+                                                : e.toString().toUpperCase(),
                                             style: smallText.copyWith(
                                                 color: AppColors.textGrey,
                                                 fontSize: 16,
