@@ -40,8 +40,10 @@ class DetailController extends ChangeNotifier {
         await detailApi.getSecuritiesStatsDetail(ticker).then((value) {
           allStats[ticker] = ApiResponse.completed(value);
           notifyListeners();
-        }).onError((error, stackTrace) {
-          allStats[ticker] = ApiResponse.error(error.toString());
+        }).onError((e, s) {
+          log(s.toString());
+          log(e.toString());
+          allStats[ticker] = ApiResponse.error(e.toString());
           notifyListeners();
         });
       }

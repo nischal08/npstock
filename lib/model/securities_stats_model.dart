@@ -32,7 +32,7 @@ class ResponseSSM {
   final double ltp;
   final double pointChange;
   final double percentageChange;
-  final int volume;
+  final double volume;
   final int sharesTraded;
   final int marketCap;
   final String updatedOn;
@@ -57,9 +57,9 @@ class ResponseSSM {
         percentageChange: json["percentage_change"] == null
             ? 0.0
             : json["percentage_change"]!.toDouble(),
-        volume: json["volume"]??0,
+        volume: json["volume"] == null ? 0.0 : json["volume"]!.toDouble(),
         sharesTraded: json["shares_traded"],
-        marketCap: json["market_cap"]??0,
+        marketCap: json["market_cap"] ?? 0,
         updatedOn: json["updated_on"] ?? "",
       );
 
