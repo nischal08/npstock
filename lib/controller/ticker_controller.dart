@@ -20,20 +20,42 @@ class TickerController extends ChangeNotifier {
   ];
 
   String currentDuration = "1D";
+  bool showDelete = false;
 
   setCurrentDuration(String durationName) {
     currentDuration = durationName;
     notifyListeners();
   }
 
+  setShowDelete({bool? value}) {
+    showDelete = value ?? !showDelete;
+    notifyListeners();
+  }
+
+  deleteUserTicker(int index) {
+    List<ResponseDataWL> userTickerTemp = [...userTicker.data!.response];
+    userTickerTemp.removeAt(index);
+    setStateWatchList(
+        ApiResponse.completed(WatchList(response: userTickerTemp)));
+    DatabaseHelperRepository().deleteTicker(index);
+  }
+
+  setStateWatchList(ApiResponse<WatchList> value, {bool noNotifier = false}) {
+    userTicker = value;
+    if (!noNotifier) notifyListeners();
+  }
+
+  setStateAllTicker(ApiResponse<AllTickers> value, {bool noNotifier = false}) {
+    allTicker = value;
+    if (!noNotifier) notifyListeners();
+  }
+
   Future<void> getAllTicker() async {
     // allTicker = ApiResponse.loading();
     await TickerApi().getAllTicker().then((value) {
-      allTicker = ApiResponse.completed(value);
-      notifyListeners();
+      setStateAllTicker(ApiResponse.completed(value));
     }).onError((error, stackTrace) {
-      allTicker = ApiResponse.error(error.toString());
-      notifyListeners();
+      setStateAllTicker(ApiResponse.error(error.toString()));
     });
   }
 
@@ -45,15 +67,12 @@ class TickerController extends ChangeNotifier {
     if (allTickerDb != null) {
       allUserTicker = allTickerDb;
       await TickerApi().getUserTicker(allTickerDb).then((value) {
-        userTicker = ApiResponse.completed(value);
-        notifyListeners();
+        setStateWatchList(ApiResponse.completed(value));
       }).onError((error, stackTrace) {
-        userTicker = ApiResponse.error(error.toString());
-        notifyListeners();
+        setStateWatchList(ApiResponse.error(error.toString()));
       });
     } else {
-      userTicker = ApiResponse.completed(WatchList(response: []));
-      notifyListeners();
+      setStateWatchList(ApiResponse.completed(WatchList(response: [])));
     }
   }
 }

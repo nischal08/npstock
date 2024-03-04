@@ -79,7 +79,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      //TODO: delete watch list
+                      Provider.of<TickerController>(context, listen: false)
+                          .setShowDelete();
                     },
                     child: Container(
                       padding: const EdgeInsets.all(10),
@@ -120,12 +121,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         separatorBuilder: (context, index) =>
                             const SizedBox(height: 10),
                         itemBuilder: (context, index) {
-                          ResponseData responseData =
+                          ResponseDataWL responseData =
                               provider.userTicker.data!.response[index];
                           return HomeTickerInfoItem(
                             responseData: responseData,
                             isBottomPadding: index ==
                                 provider.userTicker.data!.response.length - 1,
+                            showdelete: provider.showDelete,
+                            onDelete: () {
+                              Provider.of<TickerController>(context,
+                                      listen: false)
+                                  .deleteUserTicker(index);
+                            },
                           );
                         },
                       );
@@ -139,4 +146,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-

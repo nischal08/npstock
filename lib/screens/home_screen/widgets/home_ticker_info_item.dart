@@ -6,13 +6,17 @@ import 'package:npstock/styles/app_colors.dart';
 import 'package:npstock/widgets/chart_widget.dart';
 
 class HomeTickerInfoItem extends StatelessWidget {
+  final bool showdelete;
+  final VoidCallback onDelete;
   const HomeTickerInfoItem({
     super.key,
     required this.responseData,
     required this.isBottomPadding,
+    required this.showdelete,
+    required this.onDelete,
   });
 
-  final ResponseData responseData;
+  final ResponseDataWL responseData;
   final bool isBottomPadding;
 
   @override
@@ -91,40 +95,52 @@ class HomeTickerInfoItem extends StatelessWidget {
               width: 2,
             ),
             const Spacer(),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  responseData.ltp.toString(),
-                  style: const TextStyle(
-                    fontSize: 22,
-                    color: AppColors.textGrey,
-                    fontWeight: FontWeight.bold,
+            showdelete
+                ? GestureDetector(
+                    onTap: onDelete,
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                        size: 30,
+                      ),
+                    ),
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        responseData.ltp.toString(),
+                        style: const TextStyle(
+                          fontSize: 22,
+                          color: AppColors.textGrey,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            responseData.pointChange.toString(),
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: AppColors.green,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 6,
+                          ),
+                          Text(
+                            "${responseData.percentageChange}%",
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: AppColors.green,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                ),
-                Row(
-                  children: [
-                    Text(
-                      responseData.pointChange.toString(),
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: AppColors.green,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 6,
-                    ),
-                    Text(
-                      "${responseData.percentageChange}%",
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: AppColors.green,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
           ],
         ),
       ),

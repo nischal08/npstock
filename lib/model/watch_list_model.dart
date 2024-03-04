@@ -5,15 +5,15 @@ WatchList watchListFromJson(String str) => WatchList.fromJson(json.decode(str));
 String watchListToJson(WatchList data) => json.encode(data.toJson());
 
 class WatchList {
-  final List<ResponseData> response;
+  final List<ResponseDataWL> response;
 
   WatchList({
     required this.response,
   });
 
   factory WatchList.fromJson(Map<String, dynamic> json) => WatchList(
-        response: List<ResponseData>.from(
-            json["response"].map((x) => ResponseData.fromJson(x))),
+        response: List<ResponseDataWL>.from(
+            json["response"].map((x) => ResponseDataWL.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -21,7 +21,7 @@ class WatchList {
       };
 }
 
-class ResponseData {
+class ResponseDataWL {
   final String ticker;
   final String indices;
   final String tickerName;
@@ -40,7 +40,7 @@ class ResponseData {
   final String icon;
   final List<ChartDatum> chartData;
 
-  ResponseData({
+  ResponseDataWL({
     required this.ticker,
     required this.indices,
     required this.tickerName,
@@ -60,7 +60,7 @@ class ResponseData {
     required this.chartData,
   });
 
-  factory ResponseData.fromJson(Map<String, dynamic> json) => ResponseData(
+  factory ResponseDataWL.fromJson(Map<String, dynamic> json) => ResponseDataWL(
         ticker: json["ticker"],
         indices: json["indices"],
         tickerName: json["ticker_name"],
