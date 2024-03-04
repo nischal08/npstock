@@ -46,7 +46,6 @@ class TickerController extends ChangeNotifier {
   }
 
   Future<void> getAllTicker() async {
-    // allTicker = ApiResponse.loading();
     await tickerApi.getAllTicker().then((value) {
       setStateAllTicker(ApiResponse.completed(value));
     }).onError((error, stackTrace) {
